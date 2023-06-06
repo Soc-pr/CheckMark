@@ -1,0 +1,83 @@
+MDFloatLayout:
+    MDLabel:
+        id: check_label
+        halign: "center"
+        markup: True
+        text: "[b][size=30]Current Task[/size][/b]"
+        pos_hint: { "y": 0.45 }
+
+    ScrollView:
+        pos_hint: {'center_y': .5, 'center_x': .5}
+        size_hint: .9, .8
+
+        MDList:
+            id: container
+
+
+    MDIconButton:
+        id: "add_check"
+        icon: "img/chckmrk1.png"
+        pos_hint: {"center_x": .5, "center_y": .6}
+        icon_size: "250sp"
+        on_release: "img/chckmrk2.png"
+
+    MDFloatingActionButton:
+        id: "add_delete_select"
+        icon: "plus-minus-variant"
+        on_release: app.show_task_dialog()
+        elevation_normal: 12
+        pos_hint: {"x": 0.35, "y": 0.1}
+
+    MDFloatingActionButton:
+        id: "check_review"
+        icon: "calendar-check-outline"
+        on_release: app.all_tasks_list()
+        elevation_normal: 12
+        pos_hint: {"x": 0.55, "y": 0.1}
+
+<DialogContent>:
+    orientation: "vertical"
+    spacing: "10dp"
+    size_hint: 1, None
+    height: "130dp"
+
+    GridLayout:
+        rows: 1
+
+        MDTextField:
+            id: task_text
+            hint_text: "Add Task..."
+            pos_hint: {"center_y": .4}
+            max_text_length: 50
+            on_text_validate: (app.add_task(task_text, date_text.text), app.close_dialog())
+
+    MDLabel:
+        spacing: '10dp'
+        id: date_text
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        MDRaisedButton:
+            text: "SAVE"
+            on_release: (app.add_task(task_text, date_text.text), app.close_dialog())
+        MDFlatButton:
+            text: 'CANCEL'
+            on_release: app.close_dialog()
+
+
+<ListItemWithCheckbox>:
+    id: the_list_item
+    markup: True
+
+    LeftCheckbox:
+        id: check
+        on_release:
+            root.mark(check, the_list_item)
+
+    IconRightWidget:
+        icon: 'trash-can-outline'
+        theme_text_color: "Custom"
+        text_color: 1, 0, 0, 1
+        on_release:
+            root.delete_item(the_list_item)
