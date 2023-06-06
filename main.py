@@ -41,6 +41,13 @@ class ShowCreatedTasks(MDBoxLayout):
     def __init__(self, **kwargs):
         super.__init__(**kwargs)
 
+    def create_list_widget(self, task, task_date):
+        created_task = db.create_task(task.text, task_date)
+        self.ids.container.add_widget(
+        ListItemWithCheckbox(pk=created_task[0], text='[b]' + created_task[1] + '[/b]',
+                             secondary_text=created_task[2]))
+        task.text = ''
+
     def all_tasks(self):
         selected_task, unselected_task = db.get_tasks()
         if selected_task:
@@ -83,20 +90,16 @@ class MainApp(MDApp):
             self.all_tasks = MDDialog(
                 title="Your Tasks",
                 type="custom",
-                content_cls=ListItemWithCheckbox(),
+                content_cls=ShowCreatedTasks(),
             )
         self.all_tasks.open()
 
     def close_tasks(self, *args):
         self.all_tasks.dismiss()
 
-    def add_task(self, task, task_date):
+    def create_db_entry(self, task, task_date):
         created_task = db.create_task(task.text, task_date)
-        # return the created task details and create a list item
-        self.root.ids["listing"].ids['container'].add_widget(
-            ListItemWithCheckbox(pk=created_task[0], text='[b]' + created_task[1] + '[/b]',
-                                 secondary_text=created_task[2]))
-        task.text = ''
+
 
 
 if __name__ == '__main__':
