@@ -1,3 +1,4 @@
+
 MDFloatLayout:
     MDLabel:
         id: check_label
@@ -6,12 +7,7 @@ MDFloatLayout:
         text: "[b][size=30]Current Task[/size][/b]"
         pos_hint: { "y": 0.45 }
 
-    ScrollView:
-        pos_hint: {'center_y': .5, 'center_x': .5}
-        size_hint: .9, .8
 
-        MDList:
-            id: container
 
 
     MDIconButton:
@@ -35,7 +31,29 @@ MDFloatLayout:
         elevation_normal: 12
         pos_hint: {"x": 0.55, "y": 0.1}
 
-<DialogContent>:
+<ShowCreatedTasks>:
+    id: listing
+    orientation: "vertical"
+    spacing: "10dp"
+    size_hint: 1, None
+    height: "300dp"
+
+    ScrollView:
+        id: show_list
+        #pos_hint: {'center_y': .5, 'center_x': .5}
+        size_hint: .6, .5
+
+        MDList:
+            id: container
+
+    GridLayout:
+        rows: 1
+
+        MDFlatButton:
+            text: 'CLOSE'
+            on_release: app.close_tasks()
+
+<AddingTaskWindow>:
     orientation: "vertical"
     spacing: "10dp"
     size_hint: 1, None
