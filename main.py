@@ -11,16 +11,6 @@ from database import Database
 db = Database()
 
 
-class AddingTaskWindow(MDBoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.ids.date_text.text = str(datetime.now().strftime('%Y %B %d, %A, %H:%M'))
-
-    def on_save(self, instance, value, date_range):
-        date = value.strftime('%Y %B %d, %A, %H:%M')
-        self.ids.date_text.text = str(date)
-
-
 class ListItemWithCheckbox(TwoLineAvatarIconListItem):
     def __init__(self, pk=None, **kwargs):
         super().__init__(**kwargs)
@@ -35,30 +25,42 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
 
     def delete_item(self, the_list_item):
         self.parent.remove_widget(the_list_item)
-        db.delete_task(the_list_item.pk)  # Here
+        db.delete_task(the_list_item.pk)
 
 
 class ShowCreatedTasks(MDBoxLayout):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    def create_list_widget(self, task, task_date, created_task):
-        # created_task = db.create_task(task.text, task_date)
-        self.ids.container.add_widget(ListItemWithCheckbox(pk=created_task[0], text='[b]' + created_task[1] + '[/b]',
-                                                           secondary_text=created_task[2]))
-        task.text = ''
 
     def all_tasks(self):
         selected_task, unselected_task = db.get_tasks()
         if selected_task:
             for task in selected_task:
                 add_task = ListItemWithCheckbox(pk=task[0], text='[b]' + task[1] + '[/b]', secondary_text=task[2])
-                add_task.ids.check.active = True
-                self.root.ids.container.add_widget(add_task)
+                add_task.ids.the_list_item.ids['check'].active = True
+                self.ids.listing.ids['container'].add_widget(add_task)
         if unselected_task:
             for task in unselected_task:
                 add_task = ListItemWithCheckbox(pk=task[0], text=task[1], secondary_text=task[2])
-                self.root.ids.container.add_widget(add_task)
+                self.ids.listing.ids['container'].add_widget(add_task)
+
+    def create_list_widget(self, task, task_date, created_task):
+        # created_task = db.create_task(task.text, task_date)
+        self.ids.listing.ids['container'].add_widget(ListItemWithCheckbox(pk=created_task[0], text='[b]' + created_task[1] + '[/b]',
+                                                           secondary_text=created_task[2]))
+        task.text = ''
+
+
+class AddingTaskWindow(MDBoxLayout):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.ids.date_text.text = str(datetime.now().strftime('%Y %B %d, %A, %H:%M'))
+
+    def on_save(self, instance, value, date_range):
+        date = value.strftime('%Y %B %d, %A, %H:%M')
+        self.ids.date_text.text = str(date)
 
 
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
@@ -82,7 +84,7 @@ class MainApp(MDApp):
             )
         self.task_list_dialog.open()
 
-    def close_dialog(self, *args):
+    def close_dialog(self, *kwargs):
         self.task_list_dialog.dismiss()
 
     def all_tasks_list(self):

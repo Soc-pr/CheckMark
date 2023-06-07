@@ -9,27 +9,31 @@ class Database:
 
     def create_task_table(self):
         self.cursor.execute("CREATE TABLE IF NOT EXISTS tasks (id integer PRIMARY KEY AUTOINCREMENT, "
-                            "task varchar(50) NOT NULL, due_date varchar(50), "
+                            "task varchar(50) NOT NULL, time_date varchar(50), "
                             "selected BOOLEAN NOT NULL CHECK (selected IN (0,1)))")
         self.con.commit()
 
-    def create_task(self, task, due_date=None):
-        self.cursor.execute("INSERT INTO tasks(task, due_date, selected) "
-                            "VALUES(?,?,?)", (task, due_date, 0))
+    def create_task(self, task, time_date=None):
+        self.cursor.execute("INSERT INTO tasks(task, time_date, selected) "
+                            "VALUES(?,?,?)", (task, time_date, 0))
         self.con.commit()
 
-        created_task = self.cursor.execute("SELECT id, task, due_date FROM tasks WHERE task = ?"
+        created_task = self.cursor.execute("SELECT id, task, time_date FROM tasks WHERE task = ?"
                                            "and selected = 0", (task,)).fetchall()
         return created_task[-1]
 
     def get_tasks(self):
-        unselected_tasks = self.cursor.execute("SELECT id, task, due_date FROM tasks WHERE selected = 0").fetchall()
-        selected_task = self.cursor.execute("SELECT id, task, due_date FROM tasks WHERE selected= 1").fetchall()
+        unselected_tasks = self.cursor.execute("SELECT id, task, time_date FROM tasks WHERE selected = 0").fetchall()
+        selected_task = self.cursor.execute("SELECT id, task, time_date FROM tasks WHERE selected= 1").fetchall()
         return selected_task, unselected_tasks
 
     def mark_task_as_selected(self, taskid):
         self.cursor.execute("UPDATE tasks SET selected = 1 WHERE id = ?", (taskid,))
         self.con.commit()
+
+    # def crate_new_selected_instance(self, task, time_date=None):
+    #     self.cursor.execute("INSERT INTO tasks(task, time_date, selected) VALUES(?,?,?)", (task, time_date, 1))
+    #     self.con.commit()
 
     def mark_task_as_unselected(self, taskid):
         self.cursor.execute("UPDATE tasks SET selected = 0 WHERE id = ?", (taskid,))
