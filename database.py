@@ -8,7 +8,9 @@ class Database:
         self.create_task_table()
 
     def create_task_table(self):
-        self.cursor.execute("CREATE TABLE IF NOT EXISTS tasks (id integer PRIMARY KEY AUTOINCREMENT, task varchar(50) NOT NULL, due_date varchar(50), selected BOOLEAN NOT NULL CHECK (selected IN (0,1)))")
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS tasks (id integer PRIMARY KEY AUTOINCREMENT, "
+                            "task varchar(50) NOT NULL, due_date varchar(50), "
+                            "selected BOOLEAN NOT NULL CHECK (selected IN (0,1)))")
         self.con.commit()
 
     def create_task(self, task, due_date=None):

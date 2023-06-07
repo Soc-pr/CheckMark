@@ -7,9 +7,6 @@ MDFloatLayout:
         text: "[b][size=30]Current Task[/size][/b]"
         pos_hint: { "y": 0.45 }
 
-
-
-
     MDIconButton:
         id: "add_check"
         icon: "img/chckmrk1.png"
@@ -25,7 +22,7 @@ MDFloatLayout:
         pos_hint: {"x": 0.35, "y": 0.1}
 
     MDFloatingActionButton:
-        id: "check_review"
+        id: check_review
         icon: "calendar-check-outline"
         on_release: app.all_tasks_list()
         elevation_normal: 12
@@ -36,11 +33,11 @@ MDFloatLayout:
     orientation: "vertical"
     spacing: "10dp"
     size_hint: 1, None
-    height: "300dp"
+    height: "400dp"
 
     ScrollView:
         id: show_list
-        #pos_hint: {'center_y': .5, 'center_x': .5}
+        pos_hint: {'center_y': .5, 'center_x': .5}
         size_hint: .6, .5
 
         MDList:

@@ -7,6 +7,7 @@ from kivymd.uix.list import TwoLineAvatarIconListItem, ILeftBodyTouch
 from kivymd.uix.selectioncontrol import MDCheckbox
 
 from database import Database
+
 db = Database()
 
 
@@ -38,14 +39,13 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
 
 
 class ShowCreatedTasks(MDBoxLayout):
-    def __init__(self, **kwargs):
-        super.__init__(**kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    def create_list_widget(self, task, task_date):
-        created_task = db.create_task(task.text, task_date)
-        self.ids.container.add_widget(
-        ListItemWithCheckbox(pk=created_task[0], text='[b]' + created_task[1] + '[/b]',
-                             secondary_text=created_task[2]))
+    def create_list_widget(self, task, task_date, created_task):
+        # created_task = db.create_task(task.text, task_date)
+        self.ids.container.add_widget(ListItemWithCheckbox(pk=created_task[0], text='[b]' + created_task[1] + '[/b]',
+                                                           secondary_text=created_task[2]))
         task.text = ''
 
     def all_tasks(self):
@@ -90,7 +90,7 @@ class MainApp(MDApp):
             self.all_tasks = MDDialog(
                 title="Your Tasks",
                 type="custom",
-                content_cls=ShowCreatedTasks(),
+                content_cls=ShowCreatedTasks()
             )
         self.all_tasks.open()
 
@@ -99,7 +99,6 @@ class MainApp(MDApp):
 
     def create_db_entry(self, task, task_date):
         created_task = db.create_task(task.text, task_date)
-
 
 
 if __name__ == '__main__':
