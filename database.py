@@ -9,7 +9,7 @@ class Database:
 
     def create_task_table(self):
         self.cursor.execute("CREATE TABLE IF NOT EXISTS tasks (id integer PRIMARY KEY AUTOINCREMENT, "
-                            "task varchar(50) NOT NULL, time_date varchar(50), "
+                            "task varchar(20) NOT NULL, time_date varchar(50), "
                             "selected BOOLEAN NOT NULL CHECK (selected IN (0,1)))")
         self.con.commit()
 
@@ -23,8 +23,10 @@ class Database:
         return created_task[-1]
 
     def get_tasks(self):
+        print("veikia db get_tasks")
         unselected_tasks = self.cursor.execute("SELECT id, task, time_date FROM tasks WHERE selected = 0").fetchall()
         selected_task = self.cursor.execute("SELECT id, task, time_date FROM tasks WHERE selected= 1").fetchall()
+        # print(unselected_tasks)
         return selected_task, unselected_tasks
 
     def mark_task_as_selected(self, taskid):

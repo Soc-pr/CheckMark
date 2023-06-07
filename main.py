@@ -32,22 +32,29 @@ class ShowCreatedTasks(MDBoxLayout):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        print("veikia_1")
 
-    def all_tasks(self):
+    # def all_tasks(self):
         selected_task, unselected_task = db.get_tasks()
+        print("veikia_2")
         if selected_task:
             for task in selected_task:
-                add_task = ListItemWithCheckbox(pk=task[0], text='[b]' + task[1] + '[/b]', secondary_text=task[2])
-                add_task.ids.the_list_item.ids['check'].active = True
-                self.ids.listing.ids['container'].add_widget(add_task)
+                add_task = ListItemWithCheckbox(pk=task[0], text='[b][u]' + task[1] + '[/b][/u]', secondary_text=task[2])
+                # add_task.ids.the_list_item.ids.check.active = True
+                self.ids.container.add_widget(add_task)
+
         if unselected_task:
             for task in unselected_task:
                 add_task = ListItemWithCheckbox(pk=task[0], text=task[1], secondary_text=task[2])
-                self.ids.listing.ids['container'].add_widget(add_task)
+                self.ids.container.add_widget(add_task)
+
+
+
 
     def create_list_widget(self, task, task_date, created_task):
+        print("veikia_3")
         # created_task = db.create_task(task.text, task_date)
-        self.ids.listing.ids['container'].add_widget(ListItemWithCheckbox(pk=created_task[0], text='[b]' + created_task[1] + '[/b]',
+        self.ids.container.add_widget(ListItemWithCheckbox(pk=created_task[0], text='[b]' + created_task[1] + '[/b]',
                                                            secondary_text=created_task[2]))
         task.text = ''
 
