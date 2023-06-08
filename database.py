@@ -23,10 +23,8 @@ class Database:
         return created_task[-1]
 
     def get_tasks(self):
-        print("veikia db get_tasks")
         unselected_tasks = self.cursor.execute("SELECT id, task, time_date FROM tasks WHERE selected = 0").fetchall()
         selected_task = self.cursor.execute("SELECT id, task, time_date FROM tasks WHERE selected= 1").fetchall()
-        # print(unselected_tasks)
         return selected_task, unselected_tasks
 
     def mark_task_as_selected(self, taskid):

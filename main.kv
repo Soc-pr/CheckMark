@@ -47,11 +47,8 @@ MDFloatLayout:
         rows: 15
         adaptive_width: True
 
-
-
         ScrollView:
             id: show_list
-            # pos_hint: {'center_y': .5, 'center_x': .5}
             size_hint: 1, 1
 
             MDList:
@@ -94,7 +91,6 @@ MDFloatLayout:
         MDFlatButton:
             text: 'CANCEL'
             on_release: app.close_dialog()
-
 
 <ListItemWithCheckbox>:
     id: the_list_item
