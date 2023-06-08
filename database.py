@@ -32,6 +32,12 @@ class Database:
         selected_task = self.cursor.execute("SELECT id, task, time_date FROM tasks WHERE selected= 1").fetchall()
         return selected_task
 
+    def push_the_big(self, time_date=None):
+        selected_task = self.cursor.execute("SELECT id, task, time_date FROM tasks WHERE selected= 1").fetchall()
+        self.cursor.execute("INSERT INTO tasks(task, time_date, selected) "
+                            "VALUES(?,?,?)", (selected_task[0][1], time_date, 1))
+        self.con.commit()
+
     def mark_task_as_selected(self, taskid):
         self.cursor.execute("UPDATE tasks SET selected = 0")
         self.cursor.execute("UPDATE tasks SET selected = 1 WHERE id = ?", (taskid,))

@@ -12,7 +12,7 @@ MDFloatLayout:
         icon: "img/chckmrk1.png"
         pos_hint: {"center_x": .5, "center_y": .6}
         icon_size: "250sp"
-        on_release: ""
+        on_release: app.push_big_button()
 
     MDFloatingActionButton:
         id: add_delete_select
@@ -87,7 +87,7 @@ MDFloatLayout:
 
         MDRaisedButton:
             text: "SAVE"
-            on_release: (app.create_db_entry(task_text, date_text.text), app.close_dialog())
+            on_release: (app.create_db_entry(task_text, date_text.text), app.close_dialog(), app.on_start())
         MDFlatButton:
             text: 'CANCEL'
             on_release: app.close_dialog()
@@ -99,7 +99,7 @@ MDFloatLayout:
     LeftCheckbox:
         id: check
         on_release:
-            root.mark(check, the_list_item)
+            root.mark(check, the_list_item), app.on_start()
 
     IconRightWidget:
         icon: 'trash-can-outline'

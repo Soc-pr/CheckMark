@@ -63,6 +63,8 @@ class AddingTaskWindow(MDBoxLayout):
         self.ids.date_text.text = str(date)
 
 
+
+
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
     pass
 
@@ -75,6 +77,12 @@ class MainApp(MDApp):
         self.theme_cls.primary_palette = "Green"
         self.theme_cls.theme_style = "Light"
         # print(self.root.ids)
+
+    def push_big_button(self):
+        new_press = db.get_selected_task()
+        date = str(datetime.now().strftime('%Y %B %d, %A, %H:%M'))
+        db.create_task(new_press[0][1], date)
+
 
     def on_start(self):
         check_label_text = self.root.ids.check_label_text
