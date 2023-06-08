@@ -1,39 +1,39 @@
 
 MDFloatLayout:
     MDLabel:
-        id: check_label
+        id: check_label_text
         halign: "center"
         markup: True
         text: "[b][size=30]Current Task[/size][/b]"
         pos_hint: { "y": 0.45 }
 
     MDIconButton:
-        id: "add_check"
+        id: add_check
         icon: "img/chckmrk1.png"
         pos_hint: {"center_x": .5, "center_y": .6}
         icon_size: "250sp"
         on_release: ""
 
     MDFloatingActionButton:
-        id: "add_delete_select"
+        id: add_delete_select
         icon: "plus-minus-variant"
         on_release: app.show_task_dialog()
         elevation_normal: 12
-        pos_hint: {"x": 0.2, "y": 0.1}
+        pos_hint: {"x": 0.25, "y": 0.1}
 
     MDFloatingActionButton:
         id: check_review
         icon: "calendar-check-outline"
-        on_release: app.all_tasks_list()
+        on_release: app.set_label_text()
         elevation_normal: 12
-        pos_hint: {"x": 0.4, "y": 0.1}
+        pos_hint: {"x": 0.45, "y": 0.1}
 
     MDFloatingActionButton:
         id: different_tasks
         icon: "list-box-outline"
         on_release: app.all_tasks_list()
         elevation_normal: 12
-        pos_hint: {"x": 0.6, "y": 0.1}
+        pos_hint: {"x": 0.65, "y": 0.1}
 
 
 <ShowCreatedTasks>:

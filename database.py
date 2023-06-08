@@ -14,12 +14,13 @@ class Database:
         self.con.commit()
 
     def create_task(self, task, time_date=None):
+        self.cursor.execute("UPDATE tasks SET selected = 0")
         self.cursor.execute("INSERT INTO tasks(task, time_date, selected) "
-                            "VALUES(?,?,?)", (task, time_date, 0))
+                            "VALUES(?,?,?)", (task, time_date, 1))
         self.con.commit()
 
         created_task = self.cursor.execute("SELECT id, task, time_date FROM tasks WHERE task = ?"
-                                           "and selected = 0", (task,)).fetchall()
+                                           "and selected = 1", (task,)).fetchall()
         return created_task[-1]
 
     def get_tasks(self):
@@ -27,7 +28,12 @@ class Database:
         selected_task = self.cursor.execute("SELECT id, task, time_date FROM tasks WHERE selected= 1").fetchall()
         return selected_task, unselected_tasks
 
+    def get_selected_task(self):
+        selected_task = self.cursor.execute("SELECT id, task, time_date FROM tasks WHERE selected= 1").fetchall()
+        return selected_task
+
     def mark_task_as_selected(self, taskid):
+        self.cursor.execute("UPDATE tasks SET selected = 0")
         self.cursor.execute("UPDATE tasks SET selected = 1 WHERE id = ?", (taskid,))
         self.con.commit()
 

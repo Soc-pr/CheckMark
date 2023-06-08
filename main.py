@@ -31,7 +31,6 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
 class ShowCreatedTasks(MDBoxLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print("veikia_1")
 
         selected_task, unselected_task = db.get_tasks()
 
@@ -59,7 +58,7 @@ class AddingTaskWindow(MDBoxLayout):
         super().__init__(**kwargs)
         self.ids.date_text.text = str(datetime.now().strftime('%Y %B %d, %A, %H:%M'))
 
-    def on_save(self, instance, value, date_range):
+    def on_save(self, instance, value, time_date):
         date = value.strftime('%Y %B %d, %A, %H:%M')
         self.ids.date_text.text = str(date)
 
@@ -75,6 +74,12 @@ class MainApp(MDApp):
     def build(self):
         self.theme_cls.primary_palette = "Green"
         self.theme_cls.theme_style = "Light"
+        # print(self.root.ids)
+
+    def on_start(self):
+        check_label_text = self.root.ids.check_label_text
+        selected_task = db.get_selected_task()
+        check_label_text.text = '[b][size=30]' + selected_task[0][1] + '[/size][/b]'
 
     def show_task_dialog(self):
         if not self.task_list_dialog:
