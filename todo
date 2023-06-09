@@ -1,0 +1,25 @@
+
+
+
+
++ perdaryti TaskList kad rodyt7 tik unique taskus (problem)
++ perdaryti task_list atvaizdavimą, kad rodytų task selected pasirinkimą iškart (RadioButton)
++ problema - jei netyčia nepažymėtas nė vienas task, nepasileidžia
+
+
+
+
+Done:
+
++ išsiaiškinti su ta root nesąmone kada pridedu Task
++ Task List rodymas <ShowCreatedTasks>
++ galimas tik vienas task pasirinkimas
++ root.MDLabel kad rodytų pasirinkto tasko pavadinimą iš db
++ pagr.mygtuko paspaudimas fiksuotų datetime.now() ir įrašytų į db
++ kada sukuriamas naujas task, jis turi iškart būti pažymėtas
++ trečias mygtukas su dabartinio Task visais paspaudimais (data+laikas) dar viename MDBoxLayout
+
+Useful:
+
+print(self.ids)
+print(self.root.ids)
