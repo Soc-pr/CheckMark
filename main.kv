@@ -24,7 +24,7 @@ MDFloatLayout:
     MDFloatingActionButton:
         id: check_review
         icon: "calendar-check-outline"
-        on_release: app.set_label_text()
+        on_release: app.time_stamp_list()
         elevation_normal: 12
         pos_hint: {"x": 0.45, "y": 0.1}
 
@@ -107,3 +107,33 @@ MDFloatLayout:
         text_color: 1, 0, 0, 1
         on_release:
             root.delete_item(the_list_item)
+
+<SelectedTaskTimestamps>:
+    id: task_timestamps
+    markup: True
+
+<ShowTaskTimestamps>:
+    id: listing
+    orientation: "vertical"
+    spacing: "10dp"
+    size_hint: 1, None
+    height: "400dp"
+
+    GridLayout:
+        rows: 15
+        adaptive_width: True
+
+        ScrollView:
+            id: show_list
+            size_hint: 1, 1
+
+            MDList:
+                id: time_stamps
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        adaptive_size: True
+
+        MDFlatButton:
+            text: 'CLOSE'
+            on_release: app.close_stamp_list()

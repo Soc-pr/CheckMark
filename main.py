@@ -3,7 +3,7 @@ from datetime import datetime
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.list import TwoLineAvatarIconListItem, ILeftBodyTouch
+from kivymd.uix.list import TwoLineAvatarIconListItem, ILeftBodyTouch, OneLineListItem
 from kivymd.uix.selectioncontrol import MDCheckbox
 
 from database import Database
@@ -26,6 +26,12 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
     def delete_item(self, the_list_item):
         self.parent.remove_widget(the_list_item)
         db.delete_task(the_list_item.pk)
+
+
+class SelectedTaskTimestamps(OneLineListItem):
+    def __init__(self, pk=None, **kwargs):
+        super().__init__(**kwargs)
+        self.pk = pk
 
 
 class ShowCreatedTasks(MDBoxLayout):
@@ -52,6 +58,23 @@ class ShowCreatedTasks(MDBoxLayout):
         task.text = ''
 
 
+class ShowTaskTimestamps(MDBoxLayout):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        selected_list = db.get_selected_list()
+
+        if selected_list:
+            for task in selected_list:
+                add_task = SelectedTaskTimestamps(pk=task[0], text=task[2])
+                self.ids.time_stamps.add_widget(add_task)
+
+
+
+    def create_list_widget(self, task, task_date, created_task):
+        self.ids.time_stamps.add_widget(SelectedTaskTimestamps(pk=created_task[0], text=created_task[2]))
+        task.text = ''
+
 class AddingTaskWindow(MDBoxLayout):
 
     def __init__(self, **kwargs):
@@ -63,8 +86,6 @@ class AddingTaskWindow(MDBoxLayout):
         self.ids.date_text.text = str(date)
 
 
-
-
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
     pass
 
@@ -72,17 +93,16 @@ class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
 class MainApp(MDApp):
     task_list_dialog = None
     all_tasks = None
+    stamp_list = None
 
     def build(self):
         self.theme_cls.primary_palette = "Green"
         self.theme_cls.theme_style = "Light"
-        # print(self.root.ids)
 
     def push_big_button(self):
         new_press = db.get_selected_task()
         date = str(datetime.now().strftime('%Y %B %d, %A, %H:%M'))
         db.create_task(new_press[0][1], date)
-
 
     def on_start(self):
         check_label_text = self.root.ids.check_label_text
@@ -112,6 +132,18 @@ class MainApp(MDApp):
 
     def close_tasks(self, *args):
         self.all_tasks.dismiss()
+
+    def time_stamp_list(self):
+        if not self.stamp_list:
+            self.stamp_list = MDDialog(
+                title="You DID the task at:",
+                type="custom",
+                content_cls=ShowTaskTimestamps()
+            )
+        self.stamp_list.open()
+
+    def close_stamp_list(self, *args):
+        self.stamp_list.dismiss()
 
     def create_db_entry(self, task, task_date):
         created_task = db.create_task(task.text, task_date)
